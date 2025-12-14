@@ -1,13 +1,23 @@
 import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const tintColor = useThemeColor({}, 'tint');
+  const colorScheme = useColorScheme();
+
+  const handleHomePress = () => {
+    router.push('/');
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -18,8 +28,22 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">BabyLoop</ThemedText>
+        <ThemedText type="title">TinyLoop</ThemedText>
         <HelloWave />
+      </ThemedView>
+      <ThemedView style={styles.homeButtonContainer}>
+        <TouchableOpacity
+          style={[styles.homeButton, { backgroundColor: tintColor }]}
+          onPress={handleHomePress}>
+          <ThemedText
+            type="defaultSemiBold"
+            style={[
+              styles.homeButtonText,
+              { color: colorScheme === 'dark' ? '#11181C' : '#ffffff' },
+            ]}>
+            HOME
+          </ThemedText>
+        </TouchableOpacity>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">שלום! האפליקציה עובדת! 🎉</ThemedText>
@@ -74,6 +98,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  homeButtonContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  homeButton: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    minWidth: 120,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  homeButtonText: {
+    fontSize: 16,
   },
   stepContainer: {
     gap: 8,
